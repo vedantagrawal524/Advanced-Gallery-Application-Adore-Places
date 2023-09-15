@@ -1,22 +1,51 @@
+import 'package:favorite_places/providers/user_places.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AddPlaceScreen extends StatefulWidget {
+class AddPlaceScreen extends ConsumerStatefulWidget {
   const AddPlaceScreen({super.key});
 
   @override
-  State<AddPlaceScreen> createState() {
+  ConsumerState<AddPlaceScreen> createState() {
     return _AddPlaceScreenState();
   }
 }
 
-class _AddPlaceScreenState extends State<AddPlaceScreen> {
+class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
 
   @override
   void dispose() {
     _titleController.dispose();
     super.dispose();
+  }
+
+  void _showDialog() {
+    showAdaptiveDialog(
+      context: context,
+      builder: (ctx) => AlertDialog.adaptive(
+        title: const Text('Invalid Input'),
+        content: const Text('Please make sure a valid Place Name was entered.'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.pop(ctx);
+            },
+            child: const Text('Okay'),
+          )
+        ],
+      ),
+    );
+  }
+
+  void _savePlace() {
+    final enteredTitle = _titleController.text;
+    if (enteredTitle.isEmpty) {
+      _showDialog();
+      return;
+    }
+    ref.read(userPlacesProvider.notifier).addPlace(enteredTitle);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -38,7 +67,7 @@ class _AddPlaceScreenState extends State<AddPlaceScreen> {
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: () {},
+              onPressed: _savePlace,
               icon: const Icon(Icons.add),
               label: const Text('Add Place'),
             ),
