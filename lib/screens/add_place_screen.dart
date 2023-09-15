@@ -31,7 +31,12 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
             onPressed: () {
               Navigator.pop(ctx);
             },
-            child: const Text('Okay'),
+            child: Text(
+              'Okay',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+              ),
+            ),
           )
         ],
       ),
