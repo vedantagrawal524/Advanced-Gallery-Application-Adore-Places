@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:favorite_places/providers/user_places.dart';
+import 'package:favorite_places/widgets/image_input.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -13,6 +16,7 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 
 class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
+  File? _takenImage;
 
   @override
   void dispose() {
@@ -25,7 +29,8 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
       context: context,
       builder: (ctx) => AlertDialog.adaptive(
         title: const Text('Invalid Input'),
-        content: const Text('Please make sure a valid Place Name was entered.'),
+        content: const Text(
+            'Please make sure a valid Place name was entered and a Image was saved!'),
         actions: [
           TextButton(
             onPressed: () {
@@ -45,11 +50,14 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
 
   void _savePlace() {
     final enteredTitle = _titleController.text;
-    if (enteredTitle.isEmpty) {
+    if (enteredTitle.isEmpty || _takenImage == null) {
       _showDialog();
       return;
     }
-    ref.read(userPlacesProvider.notifier).addPlace(enteredTitle);
+    ref.read(userPlacesProvider.notifier).addPlace(
+          enteredTitle,
+          _takenImage!,
+        );
     Navigator.of(context).pop();
   }
 
@@ -70,6 +78,10 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
                 color: Theme.of(context).colorScheme.onBackground,
               ),
             ),
+            const SizedBox(height: 10),
+            ImageInput(ontakeImage: (image) {
+              _takenImage = image;
+            }),
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _savePlace,
