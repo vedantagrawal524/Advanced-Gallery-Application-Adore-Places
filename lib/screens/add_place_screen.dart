@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:favorite_places/models/place.dart';
 import 'package:favorite_places/providers/user_places.dart';
 import 'package:favorite_places/widgets/image_input.dart';
 import 'package:favorite_places/widgets/location_input.dart';
@@ -18,6 +19,7 @@ class AddPlaceScreen extends ConsumerStatefulWidget {
 class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
   final _titleController = TextEditingController();
   File? _takenImage;
+  PlaceLocation? _selectedLocation;
 
   @override
   void dispose() {
@@ -31,7 +33,7 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
       builder: (ctx) => AlertDialog.adaptive(
         title: const Text('Invalid Input'),
         content: const Text(
-            'Please make sure a valid Place name was entered and a Image was saved!'),
+            'Please ensure that you have entered a valid place name, uploaded a supported image file, and provided valid location coordinates!'),
         actions: [
           TextButton(
             onPressed: () {
@@ -51,13 +53,16 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
 
   void _savePlace() {
     final enteredTitle = _titleController.text;
-    if (enteredTitle.isEmpty || _takenImage == null) {
+    if (enteredTitle.isEmpty ||
+        _takenImage == null ||
+        _selectedLocation == null) {
       _showDialog();
       return;
     }
     ref.read(userPlacesProvider.notifier).addPlace(
           enteredTitle,
           _takenImage!,
+          _selectedLocation!,
         );
     Navigator.of(context).pop();
   }
@@ -84,7 +89,9 @@ class _AddPlaceScreenState extends ConsumerState<AddPlaceScreen> {
               _takenImage = image;
             }),
             const SizedBox(height: 16),
-            const LocationInput(),
+            LocationInput(onSelectLocation: (location) {
+              _selectedLocation = location;
+            }),
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: _savePlace,
