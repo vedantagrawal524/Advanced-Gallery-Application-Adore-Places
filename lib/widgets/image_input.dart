@@ -13,10 +13,10 @@ class ImageInput extends StatefulWidget {
 
 class _ImageInputState extends State<ImageInput> {
   File? _takenImage;
+  final _imagePicker = ImagePicker();
   void _takePicture() async {
-    final imagePicker = ImagePicker();
     final pickedImage =
-        await imagePicker.pickImage(source: ImageSource.camera, maxWidth: 600);
+        await _imagePicker.pickImage(source: ImageSource.camera, maxWidth: 600);
     if (pickedImage == null) {
       return;
     }
@@ -26,16 +26,30 @@ class _ImageInputState extends State<ImageInput> {
     widget.ontakeImage(_takenImage!);
   }
 
+  void _selectPicture() async {
+    final selectedImage = await _imagePicker.pickImage(
+        source: ImageSource.gallery, maxWidth: 600);
+    if (selectedImage == null) {
+      return;
+    }
+    setState(() {
+      _takenImage = File(selectedImage.path);
+    });
+    widget.ontakeImage(_takenImage!);
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget content = TextButton.icon(
-      onPressed: _takePicture,
-      icon: const Icon(Icons.camera),
-      label: const Text('Take Picture'),
+    Widget previewContent = Text(
+      'No Image Choosen',
+      textAlign: TextAlign.center,
+      style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+            color: Theme.of(context).colorScheme.onBackground,
+          ),
     );
 
     if (_takenImage != null) {
-      content = GestureDetector(
+      previewContent = GestureDetector(
         onTap: _takePicture,
         child: Image.file(
           _takenImage!,
@@ -45,17 +59,36 @@ class _ImageInputState extends State<ImageInput> {
         ),
       );
     }
-    return Container(
-      decoration: BoxDecoration(
-        border: Border.all(
-          width: 1,
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+    return Column(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 1,
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+            ),
+          ),
+          height: 250,
+          width: double.infinity,
+          alignment: Alignment.center,
+          child: previewContent,
         ),
-      ),
-      height: 250,
-      width: double.infinity,
-      alignment: Alignment.center,
-      child: content,
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            TextButton.icon(
+              onPressed: _takePicture,
+              icon: const Icon(Icons.camera),
+              label: const Text('Capture Image'),
+            ),
+            TextButton.icon(
+              onPressed: _selectPicture,
+              icon: const Icon(Icons.image),
+              label: const Text('Select from Gallery'),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
