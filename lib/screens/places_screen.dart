@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:favorite_places/providers/user_places.dart';
 import 'package:favorite_places/screens/add_place_screen.dart';
 import 'package:favorite_places/widgets/places_list.dart';
