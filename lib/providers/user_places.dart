@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:favorite_places/models/place.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart' as pathProvider;
 import 'package:path/path.dart' as path;
@@ -60,6 +61,16 @@ class UserPlacesNotifier extends StateNotifier<List<Place>> {
       'address': newPlace.location.address,
     });
     state = [newPlace, ...state];
+  }
+
+  void removePlace(String placeId) async {
+    final db = await _getDatabse();
+    db.delete(
+      'user_places',
+      where: 'id=?',
+      whereArgs: [placeId],
+    );
+    state = state.where((m) => m.id != placeId).toList();
   }
 }
 
