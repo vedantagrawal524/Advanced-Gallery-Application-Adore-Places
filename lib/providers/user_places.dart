@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:favorite_places/models/place.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:path_provider/path_provider.dart' as pathProvider;
+import 'package:path_provider/path_provider.dart' as pathprovider;
 import 'package:path/path.dart' as path;
 import 'package:sqflite/sqflite.dart' as sql;
 import 'package:sqflite/sqlite_api.dart';
@@ -43,7 +43,7 @@ class UserPlacesNotifier extends StateNotifier<List<Place>> {
   }
 
   void addPlace(String title, File image, PlaceLocation location) async {
-    final appDir = await pathProvider.getApplicationDocumentsDirectory();
+    final appDir = await pathprovider.getApplicationDocumentsDirectory();
     final fileName = path.basename(image.path);
     final copiedImage = await image.copy('${appDir.path}/$fileName');
 
