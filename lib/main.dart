@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Great Places',
+      title: 'Adore Places',
       theme: theme,
       home: const PlacesScreen(),
     );
