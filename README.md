@@ -1,16 +1,9 @@
-# favorite_places
+# Advanced Gallery Application
 
-A new Flutter project.
+Tech Stack: Dart, Flutter, SQLite, Google Maps
+- Crafted a robust application for storing favorite locations along with images, leveraging Dart and Flutter for a seamless user experience across devices.
+- Utilized Image Picker to enhance image capture and selection.
+- Integrated Google Maps API to efficiently retrieve user latitude and longitude coordinates and display their location on a map.
+- Employed SQLite for optimized on-device data storage, ensuring efficient data retrieval and management
 
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+https://github.com/user-attachments/assets/e2b37d60-5e04-4ad1-8e24-1cc0fda40c4f
